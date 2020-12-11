@@ -8,6 +8,9 @@ import { StoreModule } from '@ngrx/store';
 import { ShoppingReducer } from './store/reducers/shopping.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
+import { HttpClientModule } from '@angular/common/http';
+import { EffectsModule } from '@ngrx/effects';
+import { ShoppingEffects } from './store/effects/shopping.effects';
 
 @NgModule({
   declarations: [AppComponent],
@@ -15,6 +18,7 @@ import { environment } from '../environments/environment';
     BrowserModule,
     FormsModule,
     AppRoutingModule,
+    HttpClientModule,
     StoreModule.forRoot({
       shopping: ShoppingReducer, // temporary registering shopping reducer as root reducer
     }),
@@ -22,6 +26,10 @@ import { environment } from '../environments/environment';
       maxAge: 25,
       logOnly: environment.production,
     }),
+
+    // As we're not using a feature module at this stage,
+    // we'll be using EffectsModule.forRoot() in comparison to EffectsModule.forFeature()
+    EffectsModule.forRoot([ShoppingEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent],

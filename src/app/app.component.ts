@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import {
   AddItemAction,
   DeleteItemAction,
+  LoadShoppingAction,
 } from './store/actions/shopping.actions';
 import { v4 as uuid } from 'uuid';
 
@@ -16,12 +17,18 @@ import { v4 as uuid } from 'uuid';
 })
 export class AppComponent implements OnInit {
   shoppingItems: Observable<ShoppingItem[]>;
+  loading$: Observable<Boolean>;
+  error$: Observable<Error>;
   newShoppingItem: ShoppingItem = { id: '', name: '' };
 
   constructor(private store: Store<AppState>) {}
 
   ngOnInit() {
-    this.shoppingItems = this.store.select((store) => store.shopping);
+    this.shoppingItems = this.store.select((store) => store.shopping.list);
+    this.loading$ = this.store.select((store) => store.shopping.loading);
+    this.error$ = this.store.select((store) => store.shopping.error);
+
+    this.store.dispatch(new LoadShoppingAction());
   }
 
   addItem() {
